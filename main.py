@@ -60,6 +60,8 @@ def main():
         file_open.write(helpers.generate_tabulations() + "}")
         file_open.write(helpers.generate_line_break())
 
+        params_construct = []
+
         for struct in table_struct:
             field = struct[0]
             type_field = struct[1].split("(")[0]
@@ -81,11 +83,71 @@ def main():
             file_open.write(helpers.generate_tabulations() + "private " + data_type + " " + field + ";")
             file_open.write(helpers.generate_line_break())
 
+            params_construct.append(data_type + " " + field)
+
+        file_open.write(helpers.generate_line_break())
+
+        file_open.write(helpers.generate_tabulations() + "public Ajuste(" + ', '.join(params_construct) + ") {")
+
+        file_open.write(helpers.generate_line_break())
+
+        for struct in table_struct:
+            field = struct[0]
+
+            file_open.write(helpers.generate_tabulations(2) + "this. " + field + " = " + field + ";")
+            file_open.write(helpers.generate_line_break())
+
+        file_open.write(helpers.generate_tabulations() + "}")
+        file_open.write(helpers.generate_line_break(2))
+
+        for struct in table_struct:
+            field = struct[0]
+            type_field = struct[1].split("(")[0]
+
+            data_type = ''
+
+            if type_field in data_types.data_int():
+                data_type = 'int'
+
+            if type_field in data_types.data_float():
+                data_type = 'double'
+
+            if type_field in data_types.data_date():
+                data_type = 'Date'
+
+            if type_field in data_types.data_string():
+                data_type = 'String'
+
+            """ GETTERS """
+            file_open.write(helpers.generate_tabulations(1) + "public " + data_type + " get" + field.capitalize() + "() {")
+            
+            file_open.write(helpers.generate_line_break())
+            
+            file_open.write(helpers.generate_tabulations(2) + "return " + field.lower() + ";")
+
+            file_open.write(helpers.generate_line_break())
+            
+            file_open.write(helpers.generate_tabulations(1) + "}")
+            file_open.write(helpers.generate_line_break(2))
+
+            """ SETTERS """
+            file_open.write(helpers.generate_tabulations(1) + "public void set" + field.capitalize() + "(" + data_type + " " + field.lower() + ") {")
+            
+            file_open.write(helpers.generate_line_break())
+            
+            file_open.write(helpers.generate_tabulations(2) + "this." + field.lower() + " = " + field.lower() + ";")
+
+            file_open.write(helpers.generate_line_break())
+            
+            file_open.write(helpers.generate_tabulations(1) + "}")
+            file_open.write(helpers.generate_line_break(2))
+
+        file_open.write(helpers.generate_line_break())
+
         file_open.write("}")
         file_open.write(helpers.generate_line_break(2))
         
         file_open.close()
-
-
+        
 if __name__ == '__main__':
     main()
