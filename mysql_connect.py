@@ -6,7 +6,7 @@ def open_connection():
         connection = mysql.connector.connect(host='localhost',
                                             database='jvision2',
                                             user='root',
-                                            password='root')
+                                            password='')
 
         if connection.is_connected():
             db_Info = connection.get_server_info()
